@@ -5,8 +5,7 @@ namespace OneThirtyOne\S3Migration\Commands;
 use Illuminate\Console\Command;
 
 /**
- * Class MigrateCommand
- * @package OneThirtyOne\S3Migration\Commands
+ * Class MigrateCommand.
  */
 class MigrateCommand extends Command
 {
@@ -29,10 +28,9 @@ class MigrateCommand extends Command
     }
 
     /**
-     * Execute the console command
+     * Execute the console command.
      */
     public function handle()
     {
-
     }
 }

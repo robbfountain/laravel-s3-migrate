@@ -16,7 +16,7 @@ class ServiceProvider extends LaravelServiceProvider
         }
 
         $this->mergeConfigFrom(
-            __DIR__ . '/s3-migrate.php', 's3-migrate'
+            __DIR__.'/s3-migrate.php', 's3-migrate'
         );
 
         $this->app->bind('file-collector', function ($app) {
@@ -29,7 +29,7 @@ class ServiceProvider extends LaravelServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__ . '/s3-migrate.php.php' => config_path('s3-migrate.php'),
+            __DIR__.'/s3-migrate.php.php' => config_path('s3-migrate.php'),
         ]);
     }
 }

@@ -1,24 +1,19 @@
 <?php
 
-
 namespace OneThirtyOne\S3Migration;
-
 
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\Collection;
 
 /**
- * Class FileCollector
- * @package OneThirtyOne\S3Migration
+ * Class FileCollector.
  */
 class FileCollector
 {
-
     /**
      * @var
      */
     protected $files;
-
 
     protected $fileSystem;
 
