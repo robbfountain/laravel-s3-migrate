@@ -34,8 +34,6 @@ class Migrator
     }
 
     /**
-     * @param \OneThirtyOne\S3Migration\File $file
-     *
      * @return string
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */

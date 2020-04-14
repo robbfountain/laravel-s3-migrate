@@ -32,7 +32,6 @@ class FileCollector
 
     /**
      * @return \Illuminate\Support\Collection
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function fromLocalStorage()
     {

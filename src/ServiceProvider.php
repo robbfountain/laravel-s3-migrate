@@ -13,6 +13,12 @@ class ServiceProvider extends LaravelServiceProvider
      */
     public function register()
     {
+        $this->app->bind('file-collector', function ($app) {
+            return new FileCollector(
+                new FilesystemManager($app)
+            );
+        });
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MigrateCommand::class,
@@ -20,14 +26,8 @@ class ServiceProvider extends LaravelServiceProvider
         }
 
         $this->mergeConfigFrom(
-            __DIR__.'/config/s3migrate.php', 's3migrate'
+            __DIR__ . '/config/s3migrate.php', 's3migrate'
         );
-
-        $this->app->bind('file-collector', function ($app) {
-            return new FileCollector(
-                new FilesystemManager($app)
-            );
-        });
     }
 
     /**
@@ -36,7 +36,7 @@ class ServiceProvider extends LaravelServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/s3-migrate.php.php' => config_path('s3migrate.php'),
+            __DIR__ . '/config/s3migrate.php.php' => config_path('s3migrate.php'),
         ]);
     }
 }
