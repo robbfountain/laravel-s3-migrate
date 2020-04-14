@@ -15,6 +15,9 @@ class FileCollector
      */
     protected $files;
 
+    /**
+     * @var \Illuminate\Filesystem\FilesystemManager
+     */
     protected $fileSystem;
 
     /**
@@ -33,10 +36,12 @@ class FileCollector
      */
     public function fromLocalStorage()
     {
-        foreach (config('s3-migrate.disks') as $disk) {
-            $files[] = $this->fileSystem->disk($disk)->files();
+        foreach (config('s3migrate.disks') as $disk) {
+            foreach ($this->fileSystem->disk($disk)->files() as $file) {
+                $files[] = File::newFileFromStorage($disk, $file);
+            }
         }
 
-        return Collection::make($files)->flatten();
+        return Collection::make($files);
     }
 }

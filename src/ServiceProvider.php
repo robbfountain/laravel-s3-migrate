@@ -4,19 +4,23 @@ namespace OneThirtyOne\S3Migration;
 
 use Illuminate\Filesystem\FilesystemManager;
 use Illuminate\Support\ServiceProvider as LaravelServiceProvider;
+use OneThirtyOne\S3Migration\Commands\MigrateCommand;
 
 class ServiceProvider extends LaravelServiceProvider
 {
+    /**
+     * Register the service provider
+     */
     public function register()
     {
         if ($this->app->runningInConsole()) {
             $this->commands([
-
+                MigrateCommand::class,
             ]);
         }
 
         $this->mergeConfigFrom(
-            __DIR__.'/s3-migrate.php', 's3-migrate'
+            __DIR__.'/config/s3migrate.php', 's3migrate'
         );
 
         $this->app->bind('file-collector', function ($app) {
@@ -26,10 +30,13 @@ class ServiceProvider extends LaravelServiceProvider
         });
     }
 
+    /**
+     * Boot the service provider
+     */
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/s3-migrate.php.php' => config_path('s3-migrate.php'),
+            __DIR__.'/config/s3-migrate.php.php' => config_path('s3migrate.php'),
         ]);
     }
 }

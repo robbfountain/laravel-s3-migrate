@@ -3,6 +3,10 @@
 namespace OneThirtyOne\S3Migration\Commands;
 
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
+use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
+use OneThirtyOne\S3Migration\Facades\FileCollector;
+use OneThirtyOne\S3Migration\File;
 
 /**
  * Class MigrateCommand.
@@ -29,8 +33,31 @@ class MigrateCommand extends Command
 
     /**
      * Execute the console command.
+     * @throws \OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials
      */
     public function handle()
     {
+        $this->verifyAwsCredentials();
+
+        $this->getFiles()->each->migrate();
     }
+
+    /**
+     * @throws \OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials
+     */
+    protected function verifyAwsCredentials()
+    {
+        if (!config('filesystems.s3.key') || !config('filesystems.s3.secret')) {
+            throw new InvalidAwsCredentials();
+        }
+    }
+
+    /**
+     * @return mixed
+     */
+    protected function getFiles()
+    {
+        return FileCollector::fromLocalStorage();
+    }
+
 }
