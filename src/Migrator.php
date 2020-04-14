@@ -12,7 +12,7 @@ class Migrator
     /**
      * @var \OneThirtyOne\S3Migration\File
      */
-    protected File $file;
+    protected  $file;
 
     /**
      * Migrator constructor.
