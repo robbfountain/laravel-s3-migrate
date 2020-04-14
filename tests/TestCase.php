@@ -9,13 +9,12 @@ use OneThirtyOne\S3Migration\ServiceProvider;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 /**
- * Class TestCase
- * @package OneThirtyOne\S3Migration\Tests
+ * Class TestCase.
  */
 class TestCase extends Orchestra
 {
     /**
-     * Setup
+     * Setup.
      */
     protected function setUp(): void
     {
@@ -57,7 +56,7 @@ class TestCase extends Orchestra
      *     Storage::disk('my-disk')->get('file.txt');
      *     ```
      *
-     * @param  String $disk Optional
+     * @param  string $disk Optional
      * @return Filesystem
      */
     protected function mockStorageDisk($disk = 'mock')
@@ -66,7 +65,7 @@ class TestCase extends Orchestra
             return \Mockery::mock(Filesystem::class);
         });
 
-        Config::set('filesystems.disks.' . $disk, ['driver' => 'mock']);
+        Config::set('filesystems.disks.'.$disk, ['driver' => 'mock']);
         Config::set('filesystems.default', $disk);
 
         return Storage::disk($disk);

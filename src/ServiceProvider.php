@@ -9,7 +9,7 @@ use OneThirtyOne\S3Migration\Commands\MigrateCommand;
 class ServiceProvider extends LaravelServiceProvider
 {
     /**
-     * Register the service provider
+     * Register the service provider.
      */
     public function register()
     {
@@ -31,7 +31,7 @@ class ServiceProvider extends LaravelServiceProvider
     }
 
     /**
-     * Boot the service provider
+     * Boot the service provider.
      */
     public function boot()
     {
