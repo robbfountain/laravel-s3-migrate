@@ -1,16 +1,12 @@
 <?php
 
-
 namespace OneThirtyOne\S3Migration;
 
-
 /**
- * Class File
- * @package OneThirtyOne\S3Migration
+ * Class File.
  */
 class File
 {
-
     /**
      * @var
      */
@@ -56,11 +52,10 @@ class File
     }
 
     /**
-     * Migrate file to S3
+     * Migrate file to S3.
      */
     public function migrate()
     {
         return (new Migrator($this))->run();
     }
-
 }

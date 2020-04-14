@@ -1,14 +1,11 @@
 <?php
 
-
 namespace OneThirtyOne\S3Migration;
-
 
 use Illuminate\Support\Facades\Storage;
 
 /**
- * Class Migrator
- * @package OneThirtyOne\S3Migration
+ * Class Migrator.
  */
 class Migrator
 {
@@ -33,7 +30,7 @@ class Migrator
      */
     public function run()
     {
-       return Storage::putFileAs('/', $this->getFile(), $this->file->name);
+        return Storage::putFileAs('/', $this->getFile(), $this->file->name);
     }
 
     /**
