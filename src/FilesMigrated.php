@@ -9,8 +9,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Collection;
 
 /**
- * Class FilesMigrated
- * @package OneThirtyOne\S3Migration
+ * Class FilesMigrated.
  */
 class FilesMigrated
 {
@@ -40,6 +39,4 @@ class FilesMigrated
     {
         return new PrivateChannel('channel-name');
     }
-
-
 }
