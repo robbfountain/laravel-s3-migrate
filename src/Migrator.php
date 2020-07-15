@@ -33,12 +33,11 @@ class Migrator
      */
     public function run()
     {
-        if (!$this->fileShouldBeIgnored()) {
+        if (! $this->fileShouldBeIgnored()) {
             Storage::disk('s3')->putFileAs('/', $meta = $this->getFile(), $this->file->name);
 
             return $meta;
         }
-
     }
 
     public function fileShouldBeIgnored()
@@ -52,6 +51,6 @@ class Migrator
      */
     protected function getFile()
     {
-        return new LaravelFile(storage_path('app/' . $this->file->name));
+        return new LaravelFile(storage_path('app/'.$this->file->name));
     }
 }
