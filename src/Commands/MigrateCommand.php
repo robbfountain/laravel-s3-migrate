@@ -5,6 +5,7 @@ namespace OneThirtyOne\S3Migration\Commands;
 use Illuminate\Console\Command;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
+use OneThirtyOne\S3Migration\FilesMigrated;
 
 /**
  * Class MigrateCommand.
@@ -37,7 +38,16 @@ class MigrateCommand extends Command
     {
         $this->verifyAwsCredentials();
 
-        $this->getFiles()->each->migrate();
+        $migrated = $this->getFiles()->map(function ($file) {
+            $meta = $file->migrate();
+            $this->comment("Migrated {$meta->path()} ({$meta->getSize()} bytes)");
+
+            return $meta;
+        });
+
+        if ($migrated->count()) {
+            event(new FilesMigrated($migrated));
+        }
     }
 
     /**
@@ -45,7 +55,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (! config('filesystems.s3.key') || ! config('filesystems.s3.secret')) {
+        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }

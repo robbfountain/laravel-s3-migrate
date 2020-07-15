@@ -18,10 +18,16 @@ class File
     protected $name;
 
     /**
+     * @var
+     */
+    protected $size;
+
+    /**
      * File constructor.
      *
      * @param $name
      * @param $disk
+     * @param $size
      */
     public function __construct($name, $disk)
     {

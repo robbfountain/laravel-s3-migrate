@@ -2,6 +2,7 @@
 
 namespace OneThirtyOne\S3Migration;
 
+use Illuminate\Http\File as LaravelFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -13,6 +14,8 @@ class Migrator
      * @var \OneThirtyOne\S3Migration\File
      */
     protected $file;
+
+    protected $ignored = [];
 
     /**
      * Migrator constructor.
@@ -30,7 +33,17 @@ class Migrator
      */
     public function run()
     {
-        return Storage::putFileAs('/', $this->getFile(), $this->file->name);
+        if (!$this->fileShouldBeIgnored()) {
+            Storage::disk('s3')->putFileAs('/', $meta = $this->getFile(), $this->file->name);
+
+            return $meta;
+        }
+
+    }
+
+    public function fileShouldBeIgnored()
+    {
+        return in_array($this->file->name, $this->ignored);
     }
 
     /**
@@ -39,6 +52,6 @@ class Migrator
      */
     protected function getFile()
     {
-        return Storage::disk($this->file->disk)->get($this->file->name);
+        return new LaravelFile(storage_path('app/' . $this->file->name));
     }
 }

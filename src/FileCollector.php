@@ -36,7 +36,7 @@ class FileCollector
     public function fromLocalStorage()
     {
         foreach (config('s3migrate.disks') as $disk) {
-            foreach ($this->fileSystem->disk($disk)->files() as $file) {
+            foreach ($this->fileSystem->disk($disk)->allFiles() as $file) {
                 $files[] = File::newFileFromStorage($disk, $file);
             }
         }
