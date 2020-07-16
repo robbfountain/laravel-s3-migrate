@@ -5,9 +5,10 @@ namespace OneThirtyOne\S3Migration\Tests;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
+use OneThirtyOne\S3Migration\Events\S3MigrationCompleted;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
-use OneThirtyOne\S3Migration\File;
 
 class MigrationTest extends TestCase
 {
@@ -16,7 +17,7 @@ class MigrationTest extends TestCase
     {
         $files = FileCollector::fromLocalStorage();
 
-        $this->assertInstanceOf(Collection::class, $files );
+        $this->assertInstanceOf(Collection::class, $files);
 
         $this->assertEquals(3, $files->count());
     }
@@ -43,5 +44,28 @@ class MigrationTest extends TestCase
         Config::set('s3migrate.storage_path', __DIR__ . '/Fakes/');
 
         Artisan::call('onethirtyone:s3-migrate');
+    }
+
+    /** @test */
+    public function It_fires_an_event_when_files_are_migrated()
+    {
+        Event::fake();
+
+        $this->withoutExceptionHandling();
+
+        $storage = $this->mockStorageDisk('s3');
+
+        $storage->shouldReceive('putFileAs')->times(3);
+
+        Config::set('filesystems.disks.s3.key', 'testkey');
+        Config::set('filesystems.disks.s3.secret', 'testsecret');
+        Config::set('filesystems.disks.s3.region', 'us-east-1');
+        Config::set('filesystems.disks.s3.bucket', 'test-bucket');
+        Config::set('s3migrate.storage_path', __DIR__ . '/Fakes/');
+
+        Artisan::call('onethirtyone:s3-migrate');
+
+        Event::assertDispatched(S3MigrationCompleted::class);
+
     }
 }
