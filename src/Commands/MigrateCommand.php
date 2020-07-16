@@ -55,7 +55,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
+        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }

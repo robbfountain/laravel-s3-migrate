@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Storage;
  */
 class Migrator
 {
-
     /**
      * @var \OneThirtyOne\S3Migration\File
      */
@@ -45,11 +44,11 @@ class Migrator
      */
     protected function getFile()
     {
-        return new LaravelFile(storage_path('app/' . $this->file->name));
+        return new LaravelFile(storage_path('app/'.$this->file->name));
     }
 
     /**
-     * Sets the S3 bucket config
+     * Sets the S3 bucket config.
      */
     public function setBucket()
     {
