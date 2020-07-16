@@ -41,6 +41,6 @@ class FileCollector
             }
         }
 
-        return Collection::make($files);
+        return Collection::make($files ?? []);
     }
 }
