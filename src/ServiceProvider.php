@@ -37,6 +37,6 @@ class ServiceProvider extends LaravelServiceProvider
     {
         $this->publishes([
             __DIR__.'/config/s3migrate.php' => config_path('s3migrate.php'),
-        ],'s3migrate-config');
+        ], 's3migrate-config');
     }
 }
