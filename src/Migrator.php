@@ -44,7 +44,7 @@ class Migrator
      */
     protected function getFile()
     {
-        return new LaravelFile(storage_path('app/'.$this->file->name));
+        return new LaravelFile(config('s3migrate.storage_path') . $this->file->name);
     }
 
     /**
