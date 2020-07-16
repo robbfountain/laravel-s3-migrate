@@ -30,12 +30,13 @@ class MigrationTest extends TestCase
     public function It_migrates_files_to_s3()
     {
         $storage = $this->mockStorageDisk('s3');
+
         $storage->shouldReceive('putFileAs')->times(3);
 
-        Config::set('filesystems.s3.key', 'testkey');
-        Config::set('filesystems.s3.secret', 'testsecret');
-        Config::set('filesystems.s3.region', 'us-east-1');
-        Config::set('filesystems.s3.bucket', 'test-bucket');
+        Config::set('filesystems.disks.s3.key', 'testkey');
+        Config::set('filesystems.disks.s3.secret', 'testsecret');
+        Config::set('filesystems.disks.s3.region', 'us-east-1');
+        Config::set('filesystems.disks.s3.bucket', 'test-bucket');
 
         Artisan::call('onethirtyone:s3-migrate');
     }
