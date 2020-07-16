@@ -1,5 +1,5 @@
 {
-    "name": "robbfountain/laravel-s3-migrate",
+    "name": "onethirtyone/laravel-s3-migrate",
     "description": "A Laravel package to migrate from local storage to AWS S3",
     "keywords": [
         "laravel",
