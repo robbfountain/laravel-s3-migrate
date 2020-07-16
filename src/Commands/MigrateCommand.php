@@ -3,9 +3,9 @@
 namespace OneThirtyOne\S3Migration\Commands;
 
 use Illuminate\Console\Command;
+use OneThirtyOne\S3Migration\Events\S3MigrationCompleted;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
-use OneThirtyOne\S3Migration\FilesMigrated;
 
 /**
  * Class MigrateCommand.
@@ -46,7 +46,7 @@ class MigrateCommand extends Command
         });
 
         if ($migrated->count()) {
-            event(new FilesMigrated($migrated));
+            event(new S3MigrationCompleted($migrated));
         }
     }
 
@@ -55,7 +55,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
+        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }

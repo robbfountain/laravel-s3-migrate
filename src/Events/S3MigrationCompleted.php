@@ -1,6 +1,6 @@
 <?php
 
-namespace OneThirtyOne\S3Migration;
+namespace OneThirtyOne\S3Migration\Events;
 
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PrivateChannel;
@@ -11,7 +11,7 @@ use Illuminate\Support\Collection;
 /**
  * Class FilesMigrated.
  */
-class FilesMigrated
+class S3MigrationCompleted
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

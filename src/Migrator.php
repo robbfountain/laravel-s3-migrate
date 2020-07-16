@@ -10,12 +10,11 @@ use Illuminate\Support\Facades\Storage;
  */
 class Migrator
 {
+
     /**
      * @var \OneThirtyOne\S3Migration\File
      */
     protected $file;
-
-    protected $ignored = [];
 
     /**
      * Migrator constructor.
@@ -33,16 +32,11 @@ class Migrator
      */
     public function run()
     {
-        if (! $this->fileShouldBeIgnored()) {
-            Storage::disk('s3')->putFileAs('/', $meta = $this->getFile(), $this->file->name);
+        $this->setBucket();
 
-            return $meta;
-        }
-    }
+        Storage::disk('s3')->putFileAs('/', $meta = $this->getFile(), $this->file->name);
 
-    public function fileShouldBeIgnored()
-    {
-        return in_array($this->file->name, $this->ignored);
+        return $meta;
     }
 
     /**
@@ -51,6 +45,14 @@ class Migrator
      */
     protected function getFile()
     {
-        return new LaravelFile(storage_path('app/'.$this->file->name));
+        return new LaravelFile(storage_path('app/' . $this->file->name));
+    }
+
+    /**
+     * Sets the S3 bucket config
+     */
+    public function setBucket()
+    {
+        config(['filesystems.disks.s3.bucket' => config('s3migrate.aws_bucket')]);
     }
 }
