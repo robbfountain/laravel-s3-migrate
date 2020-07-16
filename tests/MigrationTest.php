@@ -7,15 +7,18 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
+use OneThirtyOne\S3Migration\File;
 
 class MigrationTest extends TestCase
 {
     /** @test */
     public function It_retrieves_files_from_local_storage()
     {
-        $this->assertInstanceOf(Collection::class, FileCollector::fromLocalStorage());
+        $files = FileCollector::fromLocalStorage();
 
-        $this->assertEquals(3, FileCollector::fromLocalStorage()->count());
+        $this->assertInstanceOf(Collection::class, $files );
+
+        $this->assertEquals(3, $files->count());
     }
 
     /** @test * */
@@ -37,6 +40,7 @@ class MigrationTest extends TestCase
         Config::set('filesystems.disks.s3.secret', 'testsecret');
         Config::set('filesystems.disks.s3.region', 'us-east-1');
         Config::set('filesystems.disks.s3.bucket', 'test-bucket');
+        Config::set('s3migrate.storage_path', __DIR__ . '/Fakes/');
 
         Artisan::call('onethirtyone:s3-migrate');
     }

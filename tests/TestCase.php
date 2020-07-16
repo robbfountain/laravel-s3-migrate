@@ -41,7 +41,7 @@ class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('filesystems.disks.local.root', './Fakes');
+        $app['config']->set('filesystems.disks.local.root', __DIR__.'/Fakes');
     }
 
     /**
