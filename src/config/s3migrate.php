@@ -18,10 +18,10 @@ return [
     'aws_bucket' => 'your-bucket-name',
 
     /**
-     * Storage Path
+     * Storage Path.
      *
      * This is the default storage path to look for files.  You should not have to change this from
      * storage_path('app/') but feel free to modify it for your environment.
      */
-    'storage_path' => storage_path('app/')
+    'storage_path' => storage_path('app/'),
 ];
