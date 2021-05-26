@@ -35,9 +35,11 @@ class FileCollector
      */
     public function fromLocalStorage()
     {
-        foreach (config('s3migrate.disks') as $disk) {
-            foreach ($this->fileSystem->disk($disk)->allFiles() as $file) {
-                $files[] = File::newFileFromStorage($disk, $file);
+        foreach (config('s3migrate.local_paths') as $path) {
+            if (is_dir($path)) {
+                foreach (\Illuminate\Support\Facades\File::files($path) as $file) {
+                    $files[] = $file;
+                }
             }
         }
 

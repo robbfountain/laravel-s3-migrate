@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use OneThirtyOne\S3Migration\Events\S3MigrationCompleted;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
+use OneThirtyOne\S3Migration\Facades\S3Migrator;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class MigrateCommand.
@@ -20,7 +22,7 @@ class MigrateCommand extends Command
     /**
      * @var string
      */
-    protected $description = 'Migrate your local storage to AWS S3 bucket';
+    protected $description = 'Migrate your local storage to an AWS S3 bucket';
 
     /**
      * MigrateCommand constructor.
@@ -38,15 +40,22 @@ class MigrateCommand extends Command
     {
         $this->verifyAwsCredentials();
 
-        $migrated = $this->getFiles()->map(function ($file) {
-            $meta = $file->migrate();
-            $this->comment("Migrated {$meta->path()} ({$meta->getSize()} bytes)");
+        $files = $this->getFiles();
 
-            return $meta;
-        });
+        if ($this->confirm('You are about to migrate '.$files->count().' files to S3.  Continue?', 'yes')) {
+            $migrated = $files->map(function (SplFileInfo $file) {
+                S3Migrator::run($file);
+                $this->comment("Migrated {$file->getFilename()} ({$file->getSize()} bytes)");
 
-        if ($migrated->count()) {
-            event(new S3MigrationCompleted($migrated));
+                return $file;
+            });
+
+            if ($migrated->count()) {
+                event(new S3MigrationCompleted($migrated));
+                $this->info('Migration completed');
+            }
+        } else {
+            $this->error('Migration cancelled');
         }
     }
 
@@ -65,6 +74,8 @@ class MigrateCommand extends Command
      */
     protected function getFiles()
     {
-        return FileCollector::fromLocalStorage();
+        return FileCollector::fromLocalStorage()->filter(function (SplFileInfo $file) {
+            return in_array($file->getExtension(), config('s3migrate.extensions'));
+        });
     }
 }

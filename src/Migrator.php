@@ -2,7 +2,6 @@
 
 namespace OneThirtyOne\S3Migration;
 
-use Illuminate\Http\File as LaravelFile;
 use Illuminate\Support\Facades\Storage;
 
 /**
@@ -20,31 +19,23 @@ class Migrator
      *
      * @param \OneThirtyOne\S3Migration\File $file
      */
-    public function __construct(File $file)
+    public function __construct()
     {
-        $this->file = $file;
+        $this->setBucket();
     }
 
     /**
      * @return mixed
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
-    public function run()
+    public function run($file = null)
     {
-        $this->setBucket();
+        $file = $file ?? $this->file;
 
-        Storage::disk('s3')->putFileAs('/', $meta = $this->getFile(), $this->file->name);
+        $path = Storage::disk('s3')
+            ->putFileAs(config('s3migrate.aws_bucket_path', '/'), $file, $file->getFilename());
 
-        return $meta;
-    }
-
-    /**
-     * @return string
-     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     */
-    protected function getFile()
-    {
-        return new LaravelFile(config('s3migrate.storage_path').$this->file->name);
+        return $path;
     }
 
     /**

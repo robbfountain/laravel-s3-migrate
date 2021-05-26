@@ -1,6 +1,6 @@
 {
     "name": "onethirtyone/laravel-s3-migrate",
-    "description": "A Laravel package to migrate from local storage to AWS S3",
+    "description": "A Laravel package to migrate from local storage to Amazon S3",
     "keywords": [
         "laravel",
         "S3"
@@ -13,9 +13,9 @@
         }
     ],
     "require": {
-        "php" : "^7.2.5",
-        "illuminate/container": "^6.0|^7.0",
-        "illuminate/contracts": "^6.0|^7.0",
+        "php" : "^7.2.5|^8.0",
+        "illuminate/container": "^7.0|^8.0",
+        "illuminate/contracts": "^7.0|^8.0",
         "league/flysystem-aws-s3-v3": "^1.0"
     },
     "autoload": {
@@ -34,13 +34,14 @@
                 "OneThirtyOne\\S3Migration\\ServiceProvider"
             ],
             "aliases": {
-                "FileCollector": "OneThirtyOne\\S3Migration\\Facades\\FileCollector"
+                "FileCollector": "OneThirtyOne\\S3Migration\\Facades\\FileCollector",
+                "S3Migrator": "OneThirtyOne\\S3Migration\\Facades\\S3Migrator"
             }
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5",
-        "orchestra/testbench": "^5.1"
+        "phpunit/phpunit": "^8.5|^9.0",
+        "orchestra/testbench": "^5.0|^6.0"
     },
     "minimum-stability": "stable"
 }

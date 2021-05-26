@@ -36,12 +36,22 @@ class TestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param  \Illuminate\Foundation\Application  $app
+     * @param \Illuminate\Foundation\Application $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
     {
-        $app['config']->set('filesystems.disks.local.root', __DIR__.'/Fakes');
+        $app['config']->set('s3migrate.local_paths', [
+            __DIR__.'/Fakes',
+        ]);
+        $app['config']->set('filesystems.disks.s3.key', 'testkey');
+        $app['config']->set('filesystems.disks.s3.secret', 'testsecret');
+        $app['config']->set('filesystems.disks.s3.region', 'us-east-1');
+        $app['config']->set('filesystems.disks.s3.bucket', 'test-bucket');
+        $app['config']->set('s3migrate.extensions', [
+            'jpg',
+            'pdf',
+        ]);
     }
 
     /**
@@ -56,7 +66,7 @@ class TestCase extends Orchestra
      *     Storage::disk('my-disk')->get('file.txt');
      *     ```
      *
-     * @param  string $disk Optional
+     * @param string $disk Optional
      * @return Filesystem
      */
     protected function mockStorageDisk($disk = 'mock')
@@ -67,6 +77,10 @@ class TestCase extends Orchestra
 
         Config::set('filesystems.disks.'.$disk, ['driver' => 'mock']);
         Config::set('filesystems.default', $disk);
+        Config::set('filesystems.disks.'.$disk.'.key', 'testkey');
+        Config::set('filesystems.disks.'.$disk.'.secret', 'testsecret');
+        Config::set('filesystems.disks.'.$disk.'.region', 'us-east-1');
+        Config::set('filesystems.disks.'.$disk.'.bucket', 'test-bucket');
 
         return Storage::disk($disk);
     }

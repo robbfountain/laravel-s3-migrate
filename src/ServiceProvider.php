@@ -19,6 +19,10 @@ class ServiceProvider extends LaravelServiceProvider
             );
         });
 
+        $this->app->bind('s3-migrator', function ($app) {
+            return new Migrator();
+        });
+
         if ($this->app->runningInConsole()) {
             $this->commands([
                 MigrateCommand::class,
