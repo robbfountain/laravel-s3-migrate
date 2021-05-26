@@ -42,7 +42,7 @@ class MigrateCommand extends Command
 
         $files = $this->getFiles();
 
-        if ($this->confirm('You are about to migrate '.$files->count().' files to S3.  Continue?', 'yes')) {
+        if ($this->confirm('You are about to migrate ' . $files->count() . ' files to S3.  Continue?', 'yes')) {
             $migrated = $files->map(function (SplFileInfo $file) {
                 S3Migrator::run($file);
                 $this->comment("Migrated {$file->getFilename()} ({$file->getSize()} bytes)");
@@ -64,7 +64,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
+        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }

@@ -3,6 +3,8 @@
 namespace OneThirtyOne\S3Migration;
 
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class Migrator.
@@ -30,10 +32,10 @@ class Migrator
      */
     public function run($file = null)
     {
-        $file = $file ?? $this->file;
+        $this->file = $file ?? $this->file;
 
         $path = Storage::disk('s3')
-            ->putFileAs(config('s3migrate.aws_bucket_path', '/'), $file, $file->getFilename());
+            ->putFileAs($this->getPath(), $this->file, $this->file->getFilename());
 
         return $path;
     }
@@ -44,5 +46,17 @@ class Migrator
     public function setBucket()
     {
         config(['filesystems.disks.s3.bucket' => config('s3migrate.aws_bucket')]);
+    }
+
+    public function getPath()
+    {
+        return Str::of(config('s3migrate.aws_bucket_path'))->endsWith('/')
+            ? Str::of(config('s3migrate.aws_bucket_path'))
+                ->append($this->file->getRelativePath())
+                ->append('/')
+            : Str::of(config('s3migrate.aws_bucket_path'))
+                ->append('/')
+                ->append($this->file->getRelativePath())
+                ->append('/');
     }
 }
