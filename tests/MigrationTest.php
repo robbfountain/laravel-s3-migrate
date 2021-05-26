@@ -25,25 +25,27 @@ class MigrationTest extends TestCase
     /** @test * */
     public function It_requires_s3_credentials()
     {
+        Config::set('filesystems.disks.s3.key', '');
+        Config::set('filesystems.disks.s3.secret', '');
+        Config::set('filesystems.disks.s3.region', '');
+        Config::set('filesystems.disks.s3.bucket', '');
+
         $this->expectException(InvalidAwsCredentials::class);
 
         Artisan::call('onethirtyone:s3-migrate');
     }
 
-    /** @test * */
-    public function It_migrates_files_to_s3()
+    /** @test */
+    public function It_returns_expected_output()
     {
         $storage = $this->mockStorageDisk('s3');
 
         $storage->shouldReceive('putFileAs')->times(3);
 
-        Config::set('filesystems.disks.s3.key', 'testkey');
-        Config::set('filesystems.disks.s3.secret', 'testsecret');
-        Config::set('filesystems.disks.s3.region', 'us-east-1');
-        Config::set('filesystems.disks.s3.bucket', 'test-bucket');
-        Config::set('s3migrate.storage_path', __DIR__.'/Fakes/');
-
-        Artisan::call('onethirtyone:s3-migrate');
+        $this->artisan('onethirtyone:s3-migrate')
+            ->expectsConfirmation('You are about to migrate 3 files to S3.  Continue?', 'yes')
+            ->expectsOutput('Migration completed')
+            ->assertExitCode(0);
     }
 
     /** @test */
@@ -51,20 +53,30 @@ class MigrationTest extends TestCase
     {
         Event::fake();
 
-        $this->withoutExceptionHandling();
-
         $storage = $this->mockStorageDisk('s3');
 
         $storage->shouldReceive('putFileAs')->times(3);
 
-        Config::set('filesystems.disks.s3.key', 'testkey');
-        Config::set('filesystems.disks.s3.secret', 'testsecret');
-        Config::set('filesystems.disks.s3.region', 'us-east-1');
-        Config::set('filesystems.disks.s3.bucket', 'test-bucket');
-        Config::set('s3migrate.storage_path', __DIR__.'/Fakes/');
-
-        Artisan::call('onethirtyone:s3-migrate');
+        $this->artisan('onethirtyone:s3-migrate')
+            ->expectsConfirmation('You are about to migrate 3 files to S3.  Continue?', 'yes')
+            ->expectsOutput('Migration completed')
+            ->assertExitCode(0);
 
         Event::assertDispatched(S3MigrationCompleted::class);
+    }
+
+    /** @test */
+    public function It_excludes_unallowed_file_extensionst()
+    {
+        Config::set('s3migrate.extensions', ['jpg']);
+
+        $storage = $this->mockStorageDisk('s3');
+
+        $storage->shouldReceive('putFileAs')->times(2);
+
+        $this->artisan('onethirtyone:s3-migrate')
+            ->expectsConfirmation('You are about to migrate 2 files to S3.  Continue?', 'yes')
+            ->expectsOutput('Migration completed')
+            ->assertExitCode(0);
     }
 }
