@@ -42,7 +42,7 @@ class TestCase extends Orchestra
     protected function getEnvironmentSetUp($app)
     {
         $app['config']->set('s3migrate.local_paths', [
-            __DIR__ . '/Fakes'
+            __DIR__.'/Fakes',
         ]);
         $app['config']->set('filesystems.disks.s3.key', 'testkey');
         $app['config']->set('filesystems.disks.s3.secret', 'testsecret');
@@ -75,12 +75,12 @@ class TestCase extends Orchestra
             return \Mockery::mock(Filesystem::class);
         });
 
-        Config::set('filesystems.disks.' . $disk, ['driver' => 'mock']);
+        Config::set('filesystems.disks.'.$disk, ['driver' => 'mock']);
         Config::set('filesystems.default', $disk);
-        Config::set('filesystems.disks.' . $disk . '.key', 'testkey');
-        Config::set('filesystems.disks.' . $disk . '.secret', 'testsecret');
-        Config::set('filesystems.disks.' . $disk . '.region', 'us-east-1');
-        Config::set('filesystems.disks.' . $disk . '.bucket', 'test-bucket');
+        Config::set('filesystems.disks.'.$disk.'.key', 'testkey');
+        Config::set('filesystems.disks.'.$disk.'.secret', 'testsecret');
+        Config::set('filesystems.disks.'.$disk.'.region', 'us-east-1');
+        Config::set('filesystems.disks.'.$disk.'.bucket', 'test-bucket');
 
         return Storage::disk($disk);
     }

@@ -7,7 +7,6 @@ use OneThirtyOne\S3Migration\Events\S3MigrationCompleted;
 use OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials;
 use OneThirtyOne\S3Migration\Facades\FileCollector;
 use OneThirtyOne\S3Migration\Facades\S3Migrator;
-use OneThirtyOne\S3Migration\File;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**
@@ -43,10 +42,11 @@ class MigrateCommand extends Command
 
         $files = $this->getFiles();
 
-        if ($this->confirm('You are about to migrate ' . $files->count() . ' files to S3.  Continue?', 'yes')) {
+        if ($this->confirm('You are about to migrate '.$files->count().' files to S3.  Continue?', 'yes')) {
             $migrated = $files->map(function (SplFileInfo $file) {
                 S3Migrator::run($file);
                 $this->comment("Migrated {$file->getFilename()} ({$file->getSize()} bytes)");
+
                 return $file;
             });
 
@@ -64,7 +64,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
+        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }
