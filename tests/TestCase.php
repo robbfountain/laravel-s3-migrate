@@ -44,7 +44,6 @@ class TestCase extends Orchestra
         $app['config']->set('s3migrate.local_paths', [
             __DIR__ . '/Fakes'
         ]);
-
         $app['config']->set('filesystems.disks.s3.key', 'testkey');
         $app['config']->set('filesystems.disks.s3.secret', 'testsecret');
         $app['config']->set('filesystems.disks.s3.region', 'us-east-1');
