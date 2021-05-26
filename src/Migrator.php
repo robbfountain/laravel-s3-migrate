@@ -4,7 +4,6 @@ namespace OneThirtyOne\S3Migration;
 
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * Class Migrator.
