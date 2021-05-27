@@ -31,7 +31,7 @@ return [
      *
      * This is the AWS S3 bucket where the local files will be saved to
      */
-    'aws_bucket' => 'your-bucket-name',
+    'aws_bucket' => env('AWS_BUCKET'),
 
     /**
      * AWS S3 Bucket Path.
