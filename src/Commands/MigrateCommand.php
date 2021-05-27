@@ -45,11 +45,11 @@ class MigrateCommand extends Command
 
         $confirmed = $this->option('force')
             ? true
-            : $this->confirm('You are about to migrate ' . $files->count() . ' files to S3.  Continue?', 'yes');
+            : $this->confirm('You are about to migrate '.$files->count().' files to S3.  Continue?', 'yes');
 
         if ($confirmed) {
             $this->info('Running Migration');
-            
+
             $migrated = $this->withProgressBar($files, function (SplFileInfo $file) {
                 S3Migrator::run($file);
 
@@ -72,7 +72,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
+        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }
