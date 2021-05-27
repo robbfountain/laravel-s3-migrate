@@ -37,7 +37,7 @@ class FileCollector
     {
         foreach (config('s3migrate.local_paths') as $path) {
             if (is_dir($path)) {
-                foreach (\Illuminate\Support\Facades\File::files($path) as $file) {
+                foreach (\Illuminate\Support\Facades\File::allFiles($path) as $file) {
                     $files[] = $file;
                 }
             }
