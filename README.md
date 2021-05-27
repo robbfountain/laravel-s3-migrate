@@ -15,11 +15,11 @@ php artisan vendor:publish --tag=s3migrate-config
 ```
 
 ## Usage
-in `config/s3migrate.php` set your S3 bucket name and local disks for migrating
+in `config/s3migrate.php` set your configuration options
 
 Run the artisan command
 ```bash
-php artisan onethirtyone:s3-migrate
+php artisan onethirtyone:s3-migrate {--force : Migrates without confirmation prompt}
 ```
 This will migrate all files in your selected local disks to S3.  
 
