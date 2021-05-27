@@ -17,7 +17,8 @@ class MigrateCommand extends Command
     /**
      * @var string
      */
-    protected $signature = 'onethirtyone:s3-migrate';
+    protected $signature = 'onethirtyone:s3-migrate 
+                            {--F|force : Will not prompt for user confirmation}';
 
     /**
      * @var string
@@ -42,16 +43,23 @@ class MigrateCommand extends Command
 
         $files = $this->getFiles();
 
-        if ($this->confirm('You are about to migrate '.$files->count().' files to S3.  Continue?', 'yes')) {
-            $migrated = $files->map(function (SplFileInfo $file) {
+        $confirmed = $this->option('force')
+            ? true
+            : $this->confirm('You are about to migrate ' . $files->count() . ' files to S3.  Continue?', 'yes');
+
+        if ($confirmed) {
+            $this->info('Running Migration');
+            
+            $migrated = $this->withProgressBar($files, function (SplFileInfo $file) {
                 S3Migrator::run($file);
-                $this->comment("Migrated {$file->getFilename()} ({$file->getSize()} bytes)");
 
                 return $file;
             });
 
             if ($migrated->count()) {
                 event(new S3MigrationCompleted($migrated));
+
+                $this->newLine();
                 $this->info('Migration completed');
             }
         } else {
@@ -64,7 +72,7 @@ class MigrateCommand extends Command
      */
     protected function verifyAwsCredentials()
     {
-        if (! config('filesystems.disks.s3.key') || ! config('filesystems.disks.s3.secret')) {
+        if (!config('filesystems.disks.s3.key') || !config('filesystems.disks.s3.secret')) {
             throw new InvalidAwsCredentials();
         }
     }
