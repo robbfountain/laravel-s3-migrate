@@ -18,7 +18,7 @@ class Migrator
     /**
      * Migrator constructor.
      *
-     * @param \OneThirtyOne\S3Migration\File $file
+     * @param  \OneThirtyOne\S3Migration\File  $file
      */
     public function __construct()
     {
@@ -27,6 +27,7 @@ class Migrator
 
     /**
      * @return mixed
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
      */
     public function run($file = null)
