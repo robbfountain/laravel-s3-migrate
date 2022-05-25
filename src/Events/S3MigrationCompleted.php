@@ -22,7 +22,7 @@ class S3MigrationCompleted
     /**
      * FilesMigrated constructor.
      *
-     * @param \Illuminate\Support\Collection $files
+     * @param  \Illuminate\Support\Collection  $files
      */
     public function __construct(Collection $files)
     {

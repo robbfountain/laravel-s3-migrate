@@ -35,6 +35,7 @@ class MigrateCommand extends Command
 
     /**
      * Execute the console command.
+     *
      * @throws \OneThirtyOne\S3Migration\Exceptions\InvalidAwsCredentials
      */
     public function handle()

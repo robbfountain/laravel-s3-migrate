@@ -22,8 +22,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * @param \Illuminate\Foundation\Application $app
-     *
+     * @param  \Illuminate\Foundation\Application  $app
      * @return array
      */
     protected function getPackageProviders($app)
@@ -36,7 +35,7 @@ class TestCase extends Orchestra
     /**
      * Define environment setup.
      *
-     * @param \Illuminate\Foundation\Application $app
+     * @param  \Illuminate\Foundation\Application  $app
      * @return void
      */
     protected function getEnvironmentSetUp($app)
@@ -66,7 +65,7 @@ class TestCase extends Orchestra
      *     Storage::disk('my-disk')->get('file.txt');
      *     ```
      *
-     * @param string $disk Optional
+     * @param  string  $disk  Optional
      * @return Filesystem
      */
     protected function mockStorageDisk($disk = 'mock')
