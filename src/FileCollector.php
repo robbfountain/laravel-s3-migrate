@@ -23,7 +23,7 @@ class FileCollector
     /**
      * FileCollector constructor.
      *
-     * @param \Illuminate\Filesystem\FilesystemManager $fileSystem
+     * @param  \Illuminate\Filesystem\FilesystemManager  $fileSystem
      */
     public function __construct(FilesystemManager $fileSystem)
     {
